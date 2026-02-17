@@ -20,10 +20,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
-            echo "🔄 Updating code..."
-            git checkout lab2
+            echo "🔄 Updating code...
             cd /home/maeosha/labs/devops/lab2/static-website-example
-            git pull
+            git pull origin lab2
 
             echo "✅ Restarting service (if needed)..."
             # Если сервис называется static-site, перезапустим его
