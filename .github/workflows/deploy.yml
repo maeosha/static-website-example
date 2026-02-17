@@ -1,0 +1,31 @@
+name: CD
+
+on:
+  release:
+    types: [published]   # запуск при публикации релиза
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            echo "🔄 Updating code..."
+            cd /home/maeosha/labs/devops/lab1/static-website-example
+            git pull origin main
+
+            echo "✅ Restarting service (if needed)..."
+            # Если сервис называется static-site, перезапустим его
+            sudo systemctl restart static-site || true
+
+            echo "✅ Deployment finished"
