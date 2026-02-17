@@ -21,7 +21,8 @@ jobs:
           script: |
             set -e
             echo "🔄 Updating code..."
-            cd /home/maeosha/labs/devops/lab1/static-website-example
+            git checkout lab2
+            cd /home/maeosha/labs/devops/lab2/static-website-example
             git pull origin main
 
             echo "✅ Restarting service (if needed)..."
