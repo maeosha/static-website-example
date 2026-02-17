@@ -23,7 +23,7 @@ jobs:
             echo "🔄 Updating code..."
             git checkout lab2
             cd /home/maeosha/labs/devops/lab2/static-website-example
-            git pull origin main
+            git pull
 
             echo "✅ Restarting service (if needed)..."
             # Если сервис называется static-site, перезапустим его
