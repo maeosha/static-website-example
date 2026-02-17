@@ -20,7 +20,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             set -e
-            echo "🔄 Updating code...
+            echo "🔄 Updating code..."
             cd /home/maeosha/labs/devops/lab2/static-website-example
             git pull origin lab2
 
