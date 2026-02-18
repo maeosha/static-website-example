@@ -33,6 +33,6 @@ jobs:
             docker pull $IMAGE
 
             # Запускаем новый контейнер
-            docker run -d --name my-site -p 8080:80 my-site
+            docker run -d --name my-site -p 8080:80 $IMAGE
 
             echo "✅ Deployment finished"
