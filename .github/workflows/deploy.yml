@@ -8,9 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -21,18 +18,18 @@ jobs:
           script: |
             set -e
             echo "🔄 Pulling Docker image..."
-            # Логинимся в GitHub Container Registry
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            # Логинимся в GHCR (образ приватный)
+            echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Останавливаем и удаляем старый контейнер (если есть)
-            docker stop my-site || true
-            docker rm my-site || true
+            # Переходим в директорию с проектом
+            cd /home/maeosha/labs/devops/lab4/static-website-example
 
-            # Загружаем свежий образ
-            IMAGE="ghcr.io/${{ github.repository }}/static-website:latest"
-            docker pull $IMAGE
+            # Скачиваем свежий образ (чтобы compose подхватил)
+            docker pull ghcr.io/${{ github.repository }}:latest
 
-            # Запускаем новый контейнер
-            docker run -d --name my-site -p 8080:80 my-site
+            # Запускаем стек через compose
+            docker compose down || true
+            docker compose up -d
 
-            echo "✅ Deployment finished"
+            echo "✅ Deployment finished with Docker Compose"
