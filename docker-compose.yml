@@ -19,7 +19,7 @@ services:
   app:
     image: ghcr.io/maeosha/static-website-example:latest
     ports:
-      - "8080:80"
+      - "8181:80"
     environment:
       DB_HOST: db
       DB_USER: appuser
