@@ -1,0 +1,38 @@
+name: CD
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            echo "🔄 Pulling Docker image..."
+            # Логинимся в GitHub Container Registry
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Останавливаем и удаляем старый контейнер (если есть)
+            docker stop my-site || true
+            docker rm my-site || true
+
+            # Загружаем свежий образ
+            IMAGE="ghcr.io/${{ github.repository }}/static-website:latest"
+            docker pull $IMAGE
+
+            # Запускаем новый контейнер
+            docker run -d --name my-site -p 8080:80 my-site
+
+            echo "✅ Deployment finished"
