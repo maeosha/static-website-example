@@ -17,7 +17,7 @@ services:
       retries: 5
 
   app:
-    image: ghcr.io/${{ github.repository }}:latest
+    image: ghcr.io/maeosha/static-website-example:latest
     ports:
       - "8080:80"
     environment:
